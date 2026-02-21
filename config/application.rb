@@ -38,5 +38,8 @@ module OpenShop
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Configure asset pipeline to use Sprockets
+    config.assets.pipeline = :sprockets
   end
 end
