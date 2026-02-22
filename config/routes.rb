@@ -4,6 +4,6 @@ Rails.application.routes.draw do
 
   root "homepage#index"
 
-  resources :products, only: [ :index ]
+  resources :products, only: [ :show ]
   resources :categories, only: [ :show ]
 end

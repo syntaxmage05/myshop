@@ -22,11 +22,15 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="d-flex flex-column min-vh-100" style="Manrope">
+
     <%= render "shared/navbar" %>
-    <div class="container">
+
+    <main class="flex-fill">
       <%= yield %>
-    </div>
-    <%= render "shared/footer"%>
+    </main>
+
+    <%= render "shared/footer" %>
+
   </body>
 </html>

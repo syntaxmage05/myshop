@@ -1,6 +1,11 @@
 class ProductsController < ApplicationController
-  def index
-    @categories = Category.all
-    @products = Product.all
+  before_action :set_product, only: [ :show ]
+  def show
+  end
+
+  private
+
+  def set_product
+    @product = Product.friendly.find(params[:id])
   end
 end
