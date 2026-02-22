@@ -68,3 +68,4 @@ end
 gem "activeadmin"
 gem "devise", "4.9.4"
 gem "sassc-rails"
+gem 'friendly_id', '~> 5.5.0'

@@ -1,4 +1,6 @@
 class Category < ApplicationRecord
+  extend FriendlyId
+  friendly_id :name, use: :slugged
   MAX_CATEGORY_NAME_LENGTH = 200
 
   validates :name, length: { maximum: MAX_CATEGORY_NAME_LENGTH }
@@ -9,6 +11,6 @@ class Category < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    [ "created_at", "id", "name", "updated_at" ]
+    [ "created_at", "id", "name", "updated_at", "slug" ]
   end
 end

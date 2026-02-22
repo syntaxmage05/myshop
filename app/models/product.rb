@@ -1,4 +1,7 @@
 class Product < ApplicationRecord
+  extend FriendlyId
+  friendly_id :name, use: :slugged
+
   MAX_PRODUCT_NAME_LENGTH = 200
 
   validates :name, length: { maximum: MAX_PRODUCT_NAME_LENGTH }
