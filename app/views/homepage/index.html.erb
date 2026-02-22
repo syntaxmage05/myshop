@@ -1,0 +1,53 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Products</h2>
+
+  <div class="row">
+    
+    <!-- LEFT SIDEBAR -->
+    <div class="col-md-3">
+      <h5>Categories</h5>
+
+      <div class="list-group">
+
+        <!-- All Button -->
+        <%= link_to "All",
+            root_path,
+            class: "list-group-item list-group-item-action #{'active' unless params[:category_id]}" %>
+
+        <!-- Category Links -->
+        <% @categories.each do |category| %>
+          <%= link_to category.name,
+              root_path(category_id: category.id),
+              class: "list-group-item list-group-item-action #{'active' if params[:category_id].to_i == category.id}" %>
+        <% end %>
+
+      </div>
+    </div>
+
+
+    <!-- RIGHT SIDE PRODUCTS -->
+    <div class="col-md-9">
+      <div class="row">
+        <% @products.each do |product| %>
+          <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+
+              <% if product.image.present? %>
+                <%= image_tag product.image,
+                    class: "card-img-top",
+                    style: "height: 200px; object-fit: cover;" %>
+              <% end %>
+
+              <div class="card-body text-center">
+                <h6 class="card-title"><%= product.name %></h6>
+                <p class="text-muted">KSH.<%= product.price %></p>
+              </div>
+
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+</div>
