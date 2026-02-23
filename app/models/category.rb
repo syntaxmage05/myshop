@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class Category < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: :slugged
   MAX_CATEGORY_NAME_LENGTH = 200
 
-  validates :name, length: { maximum: MAX_CATEGORY_NAME_LENGTH }
   has_many :products
+  validates :name, length: { maximum: MAX_CATEGORY_NAME_LENGTH }
 
   def self.ransackable_associations(auth_object = nil)
     [ "products" ]

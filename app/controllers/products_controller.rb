@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProductsController < ApplicationController
   before_action :set_product, only: [ :show ]
   def show
@@ -5,7 +7,7 @@ class ProductsController < ApplicationController
 
   private
 
-  def set_product
-    @product = Product.friendly.find(params[:id])
-  end
+    def set_product
+      @product = Product.friendly.find(params[:id])
+    end
 end

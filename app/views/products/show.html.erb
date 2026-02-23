@@ -10,20 +10,39 @@
 
     <!-- Right Content -->
     <div class="col-md-8">
-      <h2 class="fw-bold product-title"><%= @product.name %></h2>
+
+      <h2 class="fw-bold"><%= @product.name %></h2>
 
       <p class="text-primary mb-2">
         <%= @product.category.name %>
       </p>
 
-      <h4 class="fw-bold mb-3 product-price">
-        KSH <%= @product.price %>
+      <h4 class="fw-bold mb-4">
+        <%= number_to_currency(@product.price) %>
       </h4>
 
-      <p class="text-muted product-description">
+      <%= form_with url: line_items_path, method: :post, local: true do %>
+        <div class="d-flex align-items-center gap-3">
+
+          <div>
+            <%= label_tag :quantity, "Quantity:", class: "form-label me-2" %>
+            <%= number_field_tag :quantity, 1, min: 1,
+                  class: "form-control",
+                  style: "width: 80px;" %>
+          </div>
+
+          <%= hidden_field_tag :product_id, @product.id %>
+
+          <%= submit_tag "Add to cart",
+                class: "btn btn-primary px-4" %>
+
+        </div>
+      <% end %>
+
+      <p class="text-muted mt-4">
         <%= @product.description %>
       </p>
-    </div>
 
+    </div>
   </div>
 </div>

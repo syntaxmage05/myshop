@@ -92,6 +92,13 @@ GEM
     bcrypt_pbkdf (1.1.2-arm64-darwin)
     bcrypt_pbkdf (1.1.2-x86_64-darwin)
     benchmark (0.5.0)
+    better_html (2.2.0)
+      actionview (>= 7.0)
+      activesupport (>= 7.0)
+      ast (~> 2.0)
+      erubi (~> 1.4)
+      parser (>= 2.4)
+      smart_properties
     bigdecimal (4.0.1)
     bindex (0.8.1)
     bootsnap (1.23.0)
@@ -120,6 +127,13 @@ GEM
     drb (2.2.3)
     ed25519 (1.4.0)
     erb (6.0.1)
+    erb_lint (0.9.0)
+      activesupport
+      better_html (>= 2.0.1)
+      parser (>= 2.7.1.4)
+      rainbow
+      rubocop (>= 1)
+      smart_properties
     erubi (1.13.1)
     et-orbi (1.4.0)
       tzinfo
@@ -382,6 +396,7 @@ GEM
       sprockets-rails
       tilt
     securerandom (0.4.1)
+    smart_properties (1.17.0)
     solid_cable (3.0.12)
       actioncable (>= 7.2)
       activejob (>= 7.2)
@@ -467,6 +482,7 @@ DEPENDENCIES
   cssbundling-rails
   debug
   devise (= 4.9.4)
+  erb_lint
   friendly_id (~> 5.5.0)
   image_processing (~> 1.2)
   importmap-rails
@@ -476,6 +492,8 @@ DEPENDENCIES
   puma (>= 5.0)
   rails (~> 8.0.4)
   rspec-rails
+  rubocop
+  rubocop-rails
   rubocop-rails-omakase
   sassc-rails
   solid_cable

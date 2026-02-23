@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   devise_for :users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
@@ -6,4 +8,6 @@ Rails.application.routes.draw do
 
   resources :products, only: [ :show ]
   resources :categories, only: [ :show ]
+  resources :line_items
+  resources :carts
 end

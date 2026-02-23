@@ -1,0 +1,34 @@
+<h2>Your Cart</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Qty</th>
+      <th>Product</th>
+      <th class="text-end">Price</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cart.line_items.each do |item| %>
+      <tr>
+        <td><%= item.quantity %></td>
+        <td><%= item.product.name %></td>
+        <td class="text-end">
+          <%= number_to_currency(item.total_price, :unit => "KSH ", :separator => ".", :delimiter => ",") %>
+        </td>
+      </tr>
+    <% end %>
+    <tr class="fw-bold border-top">
+      <td colspan="2">Total</td>
+      <td class="text-end">
+        <%= number_to_currency(@cart.total_price, :unit => "KSH ", :separator => ".", :delimiter => ",") %>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<%= button_to "Empty Cart",
+      @cart,
+      method: :delete,
+      class: "btn btn-danger" %>
