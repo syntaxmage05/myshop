@@ -20,6 +20,37 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <!-- Add custom CSS for hover effects -->
+<style>
+  .hover-shadow {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+  }
+  
+  .card {
+    transition: all 0.3s ease;
+  }
+  
+  .card .stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
+  }
+  
+  .list-group-item.active {
+    background-color: transparent;
+    color: #0d6efd;
+    border-left: 3px solid #0d6efd;
+  }
+</style>
   </head>
 
   <body class="d-flex flex-column min-vh-100" style="Manrope">

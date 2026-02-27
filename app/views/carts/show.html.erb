@@ -1,34 +1,77 @@
-<h2>Your Cart</h2>
+<%# app/views/carts/show.html.erb %>
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Your Cart</h2>
+    <span class="badge bg-secondary rounded-pill p-3">
+      <%= pluralize(@cart.total_quantity, 'item') %>
+    </span>
+  </div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Qty</th>
-      <th>Product</th>
-      <th class="text-end">Price</th>
-    </tr>
-  </thead>
+  <% if @cart.line_items.any? %>
+    <div class="card shadow-sm">
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" style="width: 80px">Qty</th>
+              <th scope="col">Product</th>
+              <th scope="col" class="text-end" style="width: 150px">Price</th>
+            </tr>
+          </thead>
 
-  <tbody>
-    <% @cart.line_items.each do |item| %>
-      <tr>
-        <td><%= item.quantity %></td>
-        <td><%= item.product.name %></td>
-        <td class="text-end">
-          <%= number_to_currency(item.total_price, :unit => "KSH ", :separator => ".", :delimiter => ",") %>
-        </td>
-      </tr>
-    <% end %>
-    <tr class="fw-bold border-top">
-      <td colspan="2">Total</td>
-      <td class="text-end">
-        <%= number_to_currency(@cart.total_price, :unit => "KSH ", :separator => ".", :delimiter => ",") %>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<%= button_to "Empty Cart",
-      @cart,
-      method: :delete,
-      class: "btn btn-danger" %>
+          <tbody>
+            <% @cart.line_items.each do |item| %>
+              <tr>
+                <td>
+                  <span class="badge bg-primary rounded-pill"><%= item.quantity %></span>
+                </td>
+                <td>
+                  <div class="fw-bold"><%= item.product.name %></div>
+                  <small class="text-muted">KSH <%= number_with_precision(item.product.price, precision: 2) %> each</small>
+                </td>
+                <td class="text-end align-middle">
+                  <span class="fw-bold text-primary">
+                    <%= number_to_currency(item.total_price, unit: "KSH ", separator: ".", delimiter: ",") %>
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+            
+            <tr class="table-light fw-bold">
+              <td colspan="2" class="text-uppercase">Total</td>
+              <td class="text-end">
+                <span class="h5 mb-0 text-primary">
+                  <%= number_to_currency(@cart.total_price, unit: "KSH ", separator: ".", delimiter: ",") %>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="card-footer bg-white d-flex justify-content-between align-items-center py-3">
+        <div>
+          <%= button_to "Empty Cart",
+                @cart,
+                method: :delete,
+                class: "btn btn-outline-danger",
+                data: { confirm: "Are you sure you want to empty your cart?" } %>
+        </div>
+        
+        <div class="d-flex gap-2">
+          <%= link_to "Continue Shopping", root_path, class: "btn btn-outline-secondary" %>
+          <%= link_to "Proceed to Checkout", new_order_path, class: "btn btn-primary" %>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="text-center py-5">
+      <div class="mb-4">
+        <i class="bi bi-cart-x" style="font-size: 4rem;"></i>
+      </div>
+      <h3 class="h4 mb-3">Your cart is empty</h3>
+      <p class="text-muted mb-4">Looks like you haven't added any items to your cart yet.</p>
+      <%= link_to "Start Shopping", root_path, class: "btn btn-primary btn-lg" %>
+    </div>
+  <% end %>
+</div>

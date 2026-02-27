@@ -1,27 +1,161 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Logo</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3 sticky-top">
+  <div class="container">
+    <!-- Brand/Logo -->
+    <%= link_to root_path, class: "navbar-brand fw-bold fs-3" do %>
+      <span class="text-primary">My</span>Shop
+    <% end %>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+    <!-- Mobile Toggle Button -->
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+    <!-- Main Navigation -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <!-- Left Side Navigation -->
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item mx-2">
+          <%= link_to "Home", root_path, class: "nav-link fw-semibold #{'active' if current_page?(root_path)}" %>
+        </li>
+        
+        <!-- Categories Dropdown - REPLACES the old Categories link -->
+        <li class="nav-item dropdown mx-2">
+          <a class="nav-link dropdown-toggle fw-semibold <%= 'active' if controller_name == 'categories' || params[:category_id].present? %>" 
+             href="#" 
+             role="button" 
+             data-bs-toggle="dropdown" 
+             aria-expanded="false">
+            <i class="bi bi-grid me-1"></i>Categories
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="min-width: 250px;">
+            <!-- View All Categories -->
+            <li>
+              <%= link_to products_path, class: "dropdown-item fw-bold py-2 border-bottom" do %>
+                <i class="bi bi-collection me-2 text-primary"></i>All Categories
+              <% end %>
+            </li>
+            
+            <!-- Dynamic Categories from Database -->
+            <% @categories.each do |category| %>
+              <li>
+                <%= link_to products_path(category_id: category.id), 
+                    class: "dropdown-item py-2 d-flex justify-content-between align-items-center #{'active bg-light' if params[:category_id].to_i == category.id}" do %>
+                  <span>
+                  
+                      <i class="bi bi-tag me-2 text-muted"></i>
+                  
+                    <%= category.name %>
+                  </span>
+                  <span class="badge bg-primary rounded-pill"><%= category.products.count %></span>
+                <% end %>
+              </li>
+            <% end %>
+            
+            <!-- Show more link if too many categories -->
+            <% if @categories.count > 8 %>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <%= link_to categories_path, class: "dropdown-item py-2 text-primary" do %>
+                  <i class="bi bi-arrow-right-circle me-2"></i>View All Categories
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+
+        <li class="nav-item mx-2">
+          <%= link_to "Shop", products_path, class: "nav-link fw-semibold #{'active' if controller_name == 'products' && action_name == 'index' && params[:category_id].blank?}" %>
+        </li>
+        <li class="nav-item mx-2">
+          <%= link_to "Deals", "#", class: "nav-link fw-semibold" %>
+        </li>
+        <li class="nav-item mx-2">
+          <%= link_to "Contact", "#", class: "nav-link fw-semibold" %>
         </li>
       </ul>
 
-      <!-- CART ICON -->
-      <%= link_to cart_path(cart), class: "btn btn-outline-light position-relative" do %>
-        🛒
-        <% if cart && cart.line_items.count > 0 %>
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            <%= cart.line_items.count %>
-          </span>
+      <!-- Right Side Icons -->
+      <div class="d-flex align-items-center gap-3">
+        <!-- Search Button -->
+        <button class="btn btn-link text-dark p-0" type="button" data-bs-toggle="modal" data-bs-target="#searchModal">
+          <i class="bi bi-search fs-5"></i>
+        </button>
+
+        <!-- User Menu -->
+        <div class="dropdown">
+          <button class="btn btn-link text-dark p-0 dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle fs-5"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+            <% if user_signed_in? %>
+              <li><%= link_to "My Account", "#", class: "dropdown-item py-2" %></li>
+              <li><%= link_to "My Orders", orders_path, class: "dropdown-item py-2" %></li>
+              <li><%= link_to "Wishlist", "#", class: "dropdown-item py-2" %></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><%= link_to "Sign Out", "#", class: "dropdown-item py-2 text-danger", method: :delete %></li>
+            <% else %>
+              <li><%= link_to "Sign In", "#", class: "dropdown-item py-2" %></li>
+              <li><%= link_to "Register", "#", class: "dropdown-item py-2" %></li>
+            <% end %>
+          </ul>
+        </div>
+
+        <!-- Wishlist Icon -->
+        <%= link_to "#", class: "text-dark position-relative" do %>
+          <i class="bi bi-heart fs-5"></i>
+          <% if @wishlist_count && @wishlist_count > 0 %>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+              <%= @wishlist_count %>
+            </span>
+          <% end %>
         <% end %>
-      <% end %>
+
+        <!-- Cart Icon -->
+        <%= link_to cart_path(cart), class: "btn btn-primary position-relative rounded-circle p-2", style: "width: 40px; height: 40px;" do %>
+          <i class="bi bi-cart3 text-white"></i>
+          <% if cart && cart.line_items.count > 0 %>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              <%= cart.line_items.count %>
+              <span class="visually-hidden">items in cart</span>
+            </span>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 </nav>
+
+<!-- Search Modal -->
+<div class="modal fade" id="searchModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">Search Products</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_with url: "#", method: :get, class: "d-flex" do %>
+          <div class="input-group input-group-lg">
+            <span class="input-group-text bg-white border-end-0">
+              <i class="bi bi-search"></i>
+            </span>
+            <input type="search" name="q" class="form-control border-start-0" placeholder="What are you looking for?" autocomplete="off">
+            <button type="submit" class="btn btn-primary">Search</button>
+          </div>
+        <% end %>
+        
+        <!-- Popular Searches -->
+        <div class="mt-4">
+          <p class="text-muted small mb-2">Popular searches:</p>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge bg-light text-dark p-2">Electronics</span>
+            <span class="badge bg-light text-dark p-2">Fashion</span>
+            <span class="badge bg-light text-dark p-2">Home & Garden</span>
+            <span class="badge bg-light text-dark p-2">Sports</span>
+            <span class="badge bg-light text-dark p-2">Books</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -8,6 +8,8 @@ class Product < ApplicationRecord
 
   belongs_to :category
   has_many :line_items
+  has_many :order_items
+  has_many :orders, through: :order_items
   validates :name, length: { maximum: MAX_PRODUCT_NAME_LENGTH }
   validates :price, numericality: { greater_than_or_equal_to: 0 }
 

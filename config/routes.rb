@@ -6,8 +6,14 @@ Rails.application.routes.draw do
 
   root "homepage#index"
 
-  resources :products, only: [ :show ]
-  resources :categories, only: [ :show ]
+  resources :products
+  resources :categories
   resources :line_items
   resources :carts, only: [:show, :destroy]
+
+  resources :orders, only: [:new, :create] do
+    member do
+      get :thank_you
+    end
+  end
 end

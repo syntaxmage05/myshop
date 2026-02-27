@@ -1,0 +1,90 @@
+<%# app/views/orders/new.html.erb %>
+<div class="container py-5">
+  <h1 class="mb-4">Checkout</h1>
+
+  <div class="row">
+    <!-- Checkout Form -->
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-4">Shipping Information</h5>
+          
+          <%= form_with(model: @order, local: true) do |f| %>
+            <% if @order.errors.any? %>
+              <div class="alert alert-danger">
+                <h6><%= pluralize(@order.errors.count, "error") %> prevented your order from being saved:</h6>
+                <ul class="mb-0 small">
+                  <% @order.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <%= f.label :first_name, class: "form-label fw-semibold" %>
+                <%= f.text_field :first_name, class: "form-control form-control-lg", placeholder: "John" %>
+              </div>
+              
+              <div class="col-md-6">
+                <%= f.label :last_name, class: "form-label fw-semibold" %>
+                <%= f.text_field :last_name, class: "form-control form-control-lg", placeholder: "Doe" %>
+              </div>
+              
+              <div class="col-12">
+                <%= f.label :email, class: "form-label fw-semibold" %>
+                <%= f.email_field :email, class: "form-control form-control-lg", placeholder: "john@example.com" %>
+              </div>
+              
+              <div class="col-12">
+                <%= f.label :address, class: "form-label fw-semibold" %>
+                <%= f.text_field :address, class: "form-control form-control-lg", placeholder: "123 Main St" %>
+              </div>
+              
+              <div class="col-md-5">
+                <%= f.label :city, class: "form-label fw-semibold" %>
+                <%= f.text_field :city, class: "form-control form-control-lg", placeholder: "Nairobi" %>
+              </div>
+              
+              <div class="col-md-4">
+                <%= f.label :post_code, class: "form-label fw-semibold" %>
+                <%= f.text_field :post_code, class: "form-control form-control-lg", placeholder: "00100" %>
+              </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="d-flex justify-content-between">
+              <%= link_to "Back to Cart", cart_path(@cart), class: "btn btn-outline-secondary btn-lg" %>
+              <%= f.submit "Place Order", class: "btn btn-primary btn-lg px-5" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-4">Your Order</h5>
+          
+          <% @cart.line_items.each do |item| %>
+            <div class="d-flex justify-content-between mb-2 small">
+              <span><%= item.quantity %>x <%= item.product.name %></span>
+              <span><%= number_to_currency(item.total_price, unit: "KSh ") %></span>
+            </div>
+          <% end %>
+          
+          <hr>
+          
+          <div class="d-flex justify-content-between fw-bold">
+            <span>Total</span>
+            <span class="text-primary"><%= number_to_currency(@cart.total_price, unit: "KSh ") %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
