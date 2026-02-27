@@ -9,5 +9,5 @@ Rails.application.routes.draw do
   resources :products, only: [ :show ]
   resources :categories, only: [ :show ]
   resources :line_items
-  resources :carts
+  resources :carts, only: [:show, :destroy]
 end
