@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrdersController < ApplicationController
   before_action :check_cart_not_empty, only: [:new, :create]
 
@@ -31,13 +33,13 @@ class OrdersController < ApplicationController
 
   private
 
-  def order_params
-    params.expect(order: [:first_name, :last_name, :email, :address, :post_code, :city])
-  end
-
-  def check_cart_not_empty
-    if @cart.line_items.empty?
-      redirect_to root_path, alert: "Your cart is empty"
+    def order_params
+      params.expect(order: [:first_name, :last_name, :email, :address, :post_code, :city])
     end
-  end
+
+    def check_cart_not_empty
+      if @cart.line_items.empty?
+        redirect_to root_path, alert: "Your cart is empty"
+      end
+    end
 end

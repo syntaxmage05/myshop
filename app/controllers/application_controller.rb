@@ -8,14 +8,13 @@ class ApplicationController < ActionController::Base
   before_action :load_categories_for_navbar
   helper_method :cart
 
-  
   private
-  
-  def cart
-    @cart
-  end
-  
-  def load_categories_for_navbar
-    @categories = Category.all.limit(8) # Limit for dropdown
-  end
+
+    def cart
+      @cart
+    end
+
+    def load_categories_for_navbar
+      @categories = Category.all.limit(8) # Limit for dropdown
+    end
 end

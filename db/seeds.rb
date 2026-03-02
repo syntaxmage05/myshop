@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'open-uri'
+require "open-uri"
 
 puts "Cleaning database..."
 Product.destroy_all
@@ -9,7 +9,6 @@ Category.destroy_all
 User.create!(
   email: "admin@example.com", password: "password",
   password_confirmation: "password") if Rails.env.development?
-
 
 puts "Creating categories..."
 
@@ -33,7 +32,7 @@ puts "Creating products..."
   )
 
   file = URI.open("https://picsum.photos/600/600?random=#{rand(1000)}")
-  
+
   product.image.attach(
     io: file,
     filename: "product_#{rand(1000)}.jpg",

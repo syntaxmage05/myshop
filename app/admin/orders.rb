@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register Order do
 
   # See permitted parameters documentation:
@@ -6,11 +8,10 @@ ActiveAdmin.register Order do
   # Uncomment all parameters which should be permitted for assignment
   #
   permit_params :first_name, :last_name, :email, :address, :postal_code, :city, :paid,
-              order_items_attributes: [:id, :product_id, :price, :quantity, :_destroy]
-
+    order_items_attributes: [:id, :product_id, :price, :quantity, :_destroy]
 
   form do |f|
-    f.semantic_errors 
+    f.semantic_errors
 
     f.inputs "Customer Details" do
       f.input :first_name
@@ -40,5 +41,5 @@ ActiveAdmin.register Order do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
-  
+
 end

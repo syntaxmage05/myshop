@@ -33,11 +33,11 @@ ActiveAdmin.register Category do
           link_to "View", admin_product_path(product)
         end
       end
-  
+
       div do
-        link_to "Add New Product", 
-                new_admin_product_path(products: { category_id: category.id}), 
-                class: "button"
+        link_to "Add New Product",
+          new_admin_product_path(products: { category_id: category.id }),
+          class: "button"
       end
     end
   end
