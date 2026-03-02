@@ -5,9 +5,9 @@ class Order < ApplicationRecord
   default_scope { order(created_at: :desc) }
   has_many :order_items, dependent: :destroy
   has_many :products, through: :order_items
-
   validates :first_name, :last_name, :email, :address, :post_code, :city, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
+  after_create_commit :send_confirmation_email
 
   # lets active admin save the order and items in one form
   accepts_nested_attributes_for :order_items, allow_destroy: true
@@ -22,5 +22,9 @@ class Order < ApplicationRecord
 
   def total_cost
     order_items.sum(&:cost)
+  end
+
+  def send_confirmation_email
+    OrderMailer.confirmation_order(self).deliver_later
   end
 end

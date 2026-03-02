@@ -69,6 +69,8 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "erb_lint", require: false
+  gem "letter_opener"
+  gem "letter_opener_web", "~> 3.0"
   gem "web-console"
 end
 
@@ -78,3 +80,4 @@ gem "friendly_id", "~> 5.5.0"
 gem "sassc-rails"
 
 gem "faker", "~> 3.6"
+gem "premailer-rails"

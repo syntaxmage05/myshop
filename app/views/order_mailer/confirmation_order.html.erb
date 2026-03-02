@@ -1,0 +1,41 @@
+<h1>Thank you for your order, <%= @order.first_name %>!</h1>
+
+<p>Your order has been confirmed and will be processed shortly.</p>
+
+<div class="order-info">
+  <p><strong>Order ID:</strong> <span class="order-id">#<%= @order.id %></span></p>
+  <p><strong>Order Date:</strong> <%= @order.created_at.strftime("%B %d, %Y") %></p>
+</div>
+
+<h2>Order Summary</h2>
+
+<ul class="items-list">
+  <% @order.order_items.each do |item| %>
+    <li>
+      <span class="item-quantity"><%= item.quantity %></span>
+      <span class="item-name"><%= item.product.name %></span>
+      <div class="item-details">
+        KSh <%= number_with_delimiter(item.price) %> each
+        <span class="item-subtotal">Subtotal: KSh <%= number_with_delimiter(item.cost) %></span>
+      </div>
+    </li>
+  <% end %>
+</ul>
+
+<p class="total-amount">
+  Total: KSh <%= number_with_delimiter(@order.total_cost) %>
+</p>
+
+<h2>Shipping Information</h2>
+
+<div class="shipping-box">
+  <p><strong><%= @order.first_name %> <%= @order.last_name %></strong></p>
+  <p><%= @order.address %></p>
+  <p><%= @order.city %>, <%= @order.post_code %></p>
+  <p style="margin-top: 15px;"><strong>Email:</strong> <%= @order.email %></p>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="<%= root_url %>" class="button">Continue Shopping</a>
+  <a href="<%= orders_url %>" class="button button-outline">View Your Orders</a>
+</div>
