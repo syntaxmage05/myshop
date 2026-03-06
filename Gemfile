@@ -79,7 +79,7 @@ end
 
 gem "activeadmin"
 gem "devise", "4.9.4"
-gem "friendly_id", "~> 5.5.0"
+gem "friendly_id", "~> 5.6.0"
 gem "sassc-rails"
 
 gem "faker", "~> 3.6"
