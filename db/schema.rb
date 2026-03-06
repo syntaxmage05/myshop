@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_27_121822) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_04_180326) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -90,6 +90,20 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_27_121822) do
     t.index ["product_id"], name: "index_line_items_on_product_id"
   end
 
+  create_table "mpesa_transactions", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.string "checkout_request_id"
+    t.string "merchant_request_id"
+    t.decimal "amount"
+    t.string "status"
+    t.string "phone_number"
+    t.string "result_code"
+    t.string "result_desc"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_mpesa_transactions_on_order_id"
+  end
+
   create_table "order_items", force: :cascade do |t|
     t.bigint "order_id", null: false
     t.bigint "product_id", null: false
@@ -111,6 +125,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_27_121822) do
     t.boolean "paid", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "paid_at"
+    t.string "phone"
     t.index ["created_at"], name: "index_orders_on_created_at"
   end
 
@@ -143,6 +159,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_27_121822) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "line_items", "carts"
   add_foreign_key "line_items", "products"
+  add_foreign_key "mpesa_transactions", "orders"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "products", "categories"

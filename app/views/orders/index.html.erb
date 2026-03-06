@@ -1,0 +1,48 @@
+<%# app/views/orders/index.html.erb %>
+<div class="container py-5">
+  <h1 class="mb-4">My Orders</h1>
+
+  <% if @orders.any? %>
+    <div class="row">
+      <% @orders.each do |order| %>
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                  <h5 class="card-title mb-1">Order #<%= order.id %></h5>
+                  <small class="text-muted"><%= order.created_at.strftime("%B %d, %Y") %></small>
+                </div>
+                <span class="badge bg-<%= order.paid? ? 'success' : 'warning' %> px-3 py-2">
+                  <%= order.payment_status %>
+                </span>
+              </div>
+              
+              <p class="mb-2">
+                <strong>Total:</strong> KSh <%= number_with_delimiter(order.total_cost) %>
+              </p>
+              
+              <p class="mb-3">
+                <strong>Items:</strong> <%= order.order_items.count %> item(s)
+              </p>
+              
+              <div class="d-flex gap-2">
+                <%= link_to "View Details", order_thank_you_path(order), class: "btn btn-outline-primary btn-sm" %>
+                <% if !order.paid? && order.mpesa_transaction&.pending? %>
+                  <%= link_to "Complete Payment", mpesa_payment_order_path(order), class: "btn btn-primary btn-sm" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-5">
+      <i class="bi bi-bag-x text-muted" style="font-size: 4rem;"></i>
+      <h3 class="h4 mt-3">No orders yet</h3>
+      <p class="text-muted">Start shopping to place your first order!</p>
+      <%= link_to "Browse Products", root_path, class: "btn btn-primary mt-3" %>
+    </div>
+  <% end %>
+</div>

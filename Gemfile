@@ -64,6 +64,9 @@ group :development, :test do
 
   # rspec
   gem "rspec-rails"
+
+  # For handling environment variables
+  gem "dotenv-rails"
 end
 
 group :development do
@@ -81,3 +84,10 @@ gem "sassc-rails"
 
 gem "faker", "~> 3.6"
 gem "premailer-rails"
+
+# For HTTP requests to Daraja API
+gem "faraday"
+# For generating passwords/tokens
+gem "base64"
+
+gem "mpesa_stk"

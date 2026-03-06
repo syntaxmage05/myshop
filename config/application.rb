@@ -22,6 +22,14 @@ Bundler.require(*Rails.groups)
 
 module OpenShop
   class Application < Rails::Application
+    # config.before_configuration do
+    #   env_file = File.join(Rails.root, ".env")
+    #   if File.exist?(env_file)
+    #     YAML.load(File.open(env_file)).each do |key, value|
+    #       ENV[key] = value
+    #     end
+    #   end
+    # end
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.0
 
