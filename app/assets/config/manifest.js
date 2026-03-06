@@ -4,3 +4,4 @@
 //= link controllers/application.js
 //= link controllers/hello_controller.js
 //= link controllers/index.js
+//= link controllers/mpesa_payment_controller.js

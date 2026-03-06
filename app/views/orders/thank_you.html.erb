@@ -1,29 +1,123 @@
 <%# app/views/orders/thank_you.html.erb %>
 <div class="container py-5">
   <div class="row justify-content-center">
-    <div class="col-md-6 text-center">
-      <div class="card border-0 shadow-sm">
-        <div class="card-body p-5">
-          <div class="mb-4">
-            <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+    <div class="col-md-8">
+      <!-- Success Header -->
+      <div class="text-center mb-5">
+        <div class="mb-4">
+          <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex p-4">
+            <i class="bi bi-check-lg text-success" style="font-size: 3rem;"></i>
           </div>
-          
-          <h2 class="fw-bold mb-3">Thank You!</h2>
-          
-          <p class="text-muted mb-4">
-            Your order has been successfully completed.
-          </p>
-          
-          <div class="bg-light p-4 rounded mb-4">
-            <p class="mb-2">Order Number</p>
-            <h3 class="fw-bold text-primary mb-0">#<%= @order.id %></h3>
+        </div>
+        <h1 class="display-5 fw-bold mb-3">Thank You, <%= @order.first_name %>!</h1>
+        <p class="lead text-muted">Your order has been confirmed.</p>
+      </div>
+
+      <!-- Payment Status Card -->
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+          <% if @order.paid? %>
+            <div class="alert alert-success d-flex align-items-center mb-0">
+              <i class="bi bi-check-circle-fill me-3 fs-4"></i>
+              <div>
+                <strong>Payment Received!</strong><br>
+                <span>Paid via M-Pesa on <%= @order.paid_at&.strftime("%B %d, %Y at %I:%M %p") %></span>
+                <% if @order.mpesa_transaction&.mpesa_receipt_number %>
+                  <br><small>Receipt No: <%= @order.mpesa_transaction.mpesa_receipt_number %></small>
+                <% end %>
+              </div>
+            </div>
+          <% elsif @order.mpesa_transaction&.pending? %>
+            <div class="alert alert-warning d-flex align-items-center">
+              <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
+              <div>
+                <strong>Payment Pending</strong><br>
+                <span>Your payment is still being processed. <%= link_to "Check payment status", mpesa_payment_order_path(@order) %></span>
+              </div>
+            </div>
+          <% else %>
+            <div class="alert alert-danger d-flex align-items-center">
+              <i class="bi bi-x-circle-fill me-3 fs-4"></i>
+              <div>
+                <strong>Payment Failed</strong><br>
+                <span>Please <%= link_to "try payment again", mpesa_payment_order_path(@order) %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Order Summary Card -->
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-0 py-3">
+          <h5 class="fw-bold mb-0">
+            <i class="bi bi-receipt me-2"></i>Order Summary
+          </h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="row g-3 mb-4">
+            <div class="col-sm-4">
+              <div class="bg-light rounded-3 p-3 text-center">
+                <small class="text-muted d-block mb-1">Order ID</small>
+                <strong class="fs-5">#<%= @order.id %></strong>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="bg-light rounded-3 p-3 text-center">
+                <small class="text-muted d-block mb-1">Order Date</small>
+                <strong class="fs-5"><%= @order.created_at.strftime("%b %d, %Y") %></strong>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="bg-light rounded-3 p-3 text-center">
+                <small class="text-muted d-block mb-1">Payment Status</small>
+                <span class="badge bg-<%= @order.paid? ? 'success' : (@order.mpesa_transaction&.pending? ? 'warning' : 'danger') %> fs-6 px-3 py-2">
+                  <%= @order.payment_status %>
+                </span>
+              </div>
+            </div>
           </div>
-          
-          <p class="small text-muted mb-4">
-            A confirmation email has been sent to <%= @order.email %>
-          </p>
-          
-          <%= link_to "Continue Shopping", root_path, class: "btn btn-primary btn-lg px-5" %>
+
+          <!-- Items List -->
+          <h6 class="fw-bold mb-3">Items Ordered</h6>
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="table-light">
+                <tr>
+                  <th>Product</th>
+                  <th class="text-center">Qty</th>
+                  <th class="text-end">Price</th>
+                  <th class="text-end">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @order.order_items.each do |item| %>
+                  <tr>
+                    <td><%= item.product.name %></td>
+                    <td class="text-center"><%= item.quantity %></td>
+                    <td class="text-end">KSh <%= number_with_delimiter(item.price) %></td>
+                    <td class="text-end fw-semibold">KSh <%= number_with_delimiter(item.price * item.quantity) %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+              <tfoot class="table-light">
+                <tr>
+                  <td colspan="3" class="text-end fw-bold">Total</td>
+                  <td class="text-end fw-bold text-primary">KSh <%= number_with_delimiter(@order.total_cost) %></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <!-- Actions -->
+          <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
+            <%= link_to root_path, class: "btn btn-outline-primary" do %>
+              <i class="bi bi-house-door me-2"></i>Continue Shopping
+            <% end %>
+            <%= link_to "#", class: "btn btn-primary" do %>
+              <i class="bi bi-clock-history me-2"></i>View All Orders
+            <% end %>
+          </div>
         </div>
       </div>
     </div>

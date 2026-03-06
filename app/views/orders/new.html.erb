@@ -24,32 +24,54 @@
             <div class="row g-3">
               <div class="col-md-6">
                 <%= f.label :first_name, class: "form-label fw-semibold" %>
-                <%= f.text_field :first_name, class: "form-control form-control-lg", placeholder: "John" %>
+                <%= f.text_field :first_name, class: "form-control form-control-lg", placeholder: "John", required: true %>
               </div>
               
               <div class="col-md-6">
                 <%= f.label :last_name, class: "form-label fw-semibold" %>
-                <%= f.text_field :last_name, class: "form-control form-control-lg", placeholder: "Doe" %>
+                <%= f.text_field :last_name, class: "form-control form-control-lg", placeholder: "Doe", required: true %>
               </div>
               
               <div class="col-12">
                 <%= f.label :email, class: "form-label fw-semibold" %>
-                <%= f.email_field :email, class: "form-control form-control-lg", placeholder: "john@example.com" %>
+                <%= f.email_field :email, class: "form-control form-control-lg", placeholder: "john@example.com", required: true %>
+              </div>
+
+              <!-- M-Pesa Phone Number Field -->
+              <div class="col-12">
+                <%= f.label :phone, "M-Pesa Phone Number", class: "form-label fw-semibold" %>
+                <div class="input-group">
+                  <span class="input-group-text bg-light">🇰🇪</span>
+                  <%= f.text_field :phone, class: "form-control form-control-lg", placeholder: "0712345678", value: "0712345678", required: true %>
+                </div>
+                <small class="text-muted">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Enter your M-Pesa registered phone number (e.g., 0712345678 or 254712345678)
+                </small>
               </div>
               
               <div class="col-12">
                 <%= f.label :address, class: "form-label fw-semibold" %>
-                <%= f.text_field :address, class: "form-control form-control-lg", placeholder: "123 Main St" %>
+                <%= f.text_field :address, class: "form-control form-control-lg", placeholder: "123 Main St", required: true %>
               </div>
               
               <div class="col-md-5">
                 <%= f.label :city, class: "form-label fw-semibold" %>
-                <%= f.text_field :city, class: "form-control form-control-lg", placeholder: "Nairobi" %>
+                <%= f.text_field :city, class: "form-control form-control-lg", placeholder: "Nairobi", required: true %>
               </div>
               
               <div class="col-md-4">
                 <%= f.label :post_code, class: "form-label fw-semibold" %>
-                <%= f.text_field :post_code, class: "form-control form-control-lg", placeholder: "00100" %>
+                <%= f.text_field :post_code, class: "form-control form-control-lg", placeholder: "00100", required: true %>
+              </div>
+            </div>
+
+            <!-- Payment Method Info -->
+            <div class="alert alert-info mt-4 d-flex align-items-center">
+              <i class="bi bi-shield-check fs-3 me-3"></i>
+              <div>
+                <strong>Payment via M-Pesa</strong><br>
+                <small>You'll receive an STK push prompt on your phone to complete payment</small>
               </div>
             </div>
 
@@ -57,7 +79,7 @@
 
             <div class="d-flex justify-content-between">
               <%= link_to "Back to Cart", cart_path(@cart), class: "btn btn-outline-secondary btn-lg" %>
-              <%= f.submit "Place Order", class: "btn btn-primary btn-lg px-5" %>
+              <%= f.submit "Place Order", class: "btn btn-primary btn-lg px-5", data: { disable_with: "Processing..." } %>
             </div>
           <% end %>
         </div>
@@ -73,7 +95,7 @@
           <% @cart.line_items.each do |item| %>
             <div class="d-flex justify-content-between mb-2 small">
               <span><%= item.quantity %>x <%= item.product.name %></span>
-              <span><%= number_to_currency(item.total_price, unit: "KSh ") %></span>
+              <span>KSh <%= number_with_delimiter(item.total_price) %></span>
             </div>
           <% end %>
           
@@ -81,7 +103,14 @@
           
           <div class="d-flex justify-content-between fw-bold">
             <span>Total</span>
-            <span class="text-primary"><%= number_to_currency(@cart.total_price, unit: "KSh ") %></span>
+            <span class="text-primary fs-5">KSh <%= number_with_delimiter(@cart.total_price) %></span>
+          </div>
+
+          <!-- M-Pesa Logo -->
+          <div class="text-center mt-4 pt-3 border-top">
+            <p class="small text-muted mb-2">Pay with</p>
+            <i class="bi bi-phone fs-1 text-success"></i>
+            <span class="fw-bold d-block">M-Pesa</span>
           </div>
         </div>
       </div>

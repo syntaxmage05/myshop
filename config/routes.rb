@@ -15,6 +15,11 @@ Rails.application.routes.draw do
   resources :orders, only: [:new, :create] do
     member do
       get :thank_you
+      get "mpesa_payment"
     end
   end
+
+  post "mpesa/initiate/:order_id", to: "mpesa#initiate", as: :mpesa_initiate
+  post "mpesa/callback", to: "mpesa#callback"
+  get "mpesa/status/:id", to: "mpesa#status", as: :mpesa_status
 end

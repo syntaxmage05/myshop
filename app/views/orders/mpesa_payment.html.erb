@@ -1,0 +1,115 @@
+<%# app/views/orders/mpesa_payment.html.erb %>
+<div class="container py-5" 
+     data-controller="mpesa-payment"
+     data-mpesa-payment-transaction-id-value="<%= @transaction&.id %>"
+     data-mpesa-payment-order-id-value="<%= @order.id %>">
+
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <!-- Progress Steps -->
+      <div class="d-flex justify-content-center mb-4">
+        <div class="d-flex align-items-center">
+          <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+            <i class="bi bi-check"></i>
+          </div>
+          <span class="mx-2 text-success">Order Placed</span>
+          
+          <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+            2
+          </div>
+          <span class="mx-2 fw-bold">Payment</span>
+          
+          <div class="bg-light text-muted rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+            3
+          </div>
+          <span class="mx-2 text-muted">Confirmation</span>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-5 text-center">
+          <!-- M-Pesa Logo -->
+          <div class="mb-4">
+            <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex p-4">
+              <i class="bi bi-phone fs-1 text-success"></i>
+            </div>
+          </div>
+          
+          <h2 class="fw-bold mb-3">Complete Your Payment</h2>
+          
+          <div class="bg-light p-4 rounded-3 mb-4">
+            <p class="text-muted mb-2">Order #<%= @order.id %></p>
+            <h3 class="text-primary fw-bold">KSh <%= number_with_delimiter(@order.total_cost) %></h3>
+          </div>
+          
+          <!-- Initial Status -->
+          <div id="payment-initial" data-mpesa-payment-target="status" class="mb-4">
+            <p class="mb-3">We've sent a payment request to:</p>
+            <h5 class="bg-light d-inline-block px-4 py-2 rounded-pill">
+              <i class="bi bi-phone me-2"></i>
+              <%= @order.phone %>
+            </h5>
+            
+            <div class="alert alert-info mt-4">
+              <i class="bi bi-bell me-2"></i>
+              Please check your phone and enter your M-Pesa PIN to complete payment
+            </div>
+          </div>
+          
+          <!-- Loading State -->
+          <div data-mpesa-payment-target="loading" class="text-center d-none">
+            <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="fw-bold">Waiting for payment confirmation...</p>
+            <p class="small text-muted">This may take a moment. Please don't close this window.</p>
+          </div>
+          
+          <!-- Payment Success -->
+          <div data-mpesa-payment-target="success" class="d-none">
+            <div class="text-success mb-3">
+              <i class="bi bi-check-circle-fill" style="font-size: 4rem;"></i>
+            </div>
+            <h4 class="text-success">Payment Successful!</h4>
+            <p class="mb-4">Your order #<%= @order.id %> has been confirmed</p>
+            <p class="small text-muted">Redirecting to order details...</p>
+            <div class="progress mt-3" style="height: 5px;">
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 100%"></div>
+            </div>
+          </div>
+          
+          <!-- Payment Failed -->
+          <div data-mpesa-payment-target="failed" class="d-none">
+            <div class="text-danger mb-3">
+              <i class="bi bi-x-circle-fill" style="font-size: 4rem;"></i>
+            </div>
+            <h4 class="text-danger">Payment Failed</h4>
+            <p data-mpesa-payment-target="message" class="mb-4 text-muted"></p>
+            <div class="d-flex gap-2 justify-content-center">
+              <%= link_to "Try Again", mpesa_payment_order_path(@order), class: "btn btn-primary" %>
+              <%= link_to "Back to Home", root_path, class: "btn btn-outline-secondary" %>
+            </div>
+          </div>
+          
+          <!-- Cancel Button -->
+          <div class="mt-4" data-mpesa-payment-target="cancelButton">
+            <%= link_to "Cancel Payment", thank_you_order_path(@order), 
+                class: "btn btn-outline-secondary",
+                data: { confirm: "Are you sure? Your order will still be saved." } %>
+            <p class="small text-muted mt-2">
+              Your order will still be saved. You can complete payment later.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help Text -->
+      <div class="text-center mt-4">
+        <p class="small text-muted">
+          <i class="bi bi-question-circle me-1"></i>
+          Having trouble? <a href="#" class="text-decoration-none">Contact Support</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
