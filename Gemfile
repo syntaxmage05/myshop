@@ -79,7 +79,7 @@ group :development do
 end
 
 gem "activeadmin"
-gem "devise", "4.9.4"
+gem "devise", "5.0.2"
 gem "friendly_id", "~> 5.5.0"
 gem "sassc-rails"
 
