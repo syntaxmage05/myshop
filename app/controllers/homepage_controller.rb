@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+# app/controllers/homepage_controller.rb
 class HomepageController < ApplicationController
   def index
+    # Load categories with counter cache (no need for products association)
     @categories = Category.all.order(:name)
 
-    # Base products query
+    # Base products query with eager loading
     products = if params[:category_id].present?
       category = Category.find_by(id: params[:category_id])
       category ? category.products : Product.none
@@ -28,14 +30,11 @@ class HomepageController < ApplicationController
       products = products.where("price <= ?", params[:max_price])
     end
 
+    # Eager load associations to avoid N+1 queries
+    products = products.includes(:category, :image_attachment)
+
     # Apply sorting
     @products = case params[:sort]
-                when "popular"
-                  # Count how many times each product appears in order_items
-                  products.left_joins(:order_items)
-                    .group("products.id")
-                    .select("products.*, COUNT(order_items.id) as orders_count")
-                    .order("orders_count DESC, products.created_at DESC")
                 when "newest"
                   products.order(created_at: :desc)
                 when "price_low"
@@ -46,7 +45,7 @@ class HomepageController < ApplicationController
                   products.order(created_at: :desc)
     end
 
-    # For the "All Products" count in sidebar - use a separate query
+    # Total products count for "All Products" button
     @total_products_count = Product.count
   end
 end

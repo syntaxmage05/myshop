@@ -5,6 +5,7 @@ require "open-uri"
 puts "Cleaning database..."
 Product.destroy_all
 Category.destroy_all
+User.destroy_all
 
 User.create!(
   email: "admin@example.com", password: "password",
@@ -22,7 +23,7 @@ categories = Category.all
 
 puts "Creating products..."
 
-40.times do
+400.times do
   product = Product.create!(
     name: Faker::Commerce.product_name,
     description: Faker::Lorem.paragraph(sentence_count: 3),

@@ -6,7 +6,7 @@ class Product < ApplicationRecord
 
   MAX_PRODUCT_NAME_LENGTH = 200
 
-  belongs_to :category
+  belongs_to :category, counter_cache: true
   has_many :line_items
   has_many :order_items
   has_many :orders, through: :order_items

@@ -75,6 +75,7 @@ group :development do
   gem "letter_opener"
   gem "letter_opener_web", "~> 3.0"
   gem "web-console"
+  gem 'bullet'
 end
 
 gem "activeadmin"
@@ -91,3 +92,4 @@ gem "faraday"
 gem "base64"
 
 gem "mpesa_stk"
+

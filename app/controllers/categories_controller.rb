@@ -5,5 +5,7 @@ class CategoriesController < ApplicationController
     @categories = Category.all
     @category = Category.friendly.find(params[:id])
     @products = @category.products
+      .includes(:category, image_attachment: :blob) # Add eager loading
+      .order(created_at: :desc)
   end
 end

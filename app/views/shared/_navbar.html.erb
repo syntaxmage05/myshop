@@ -18,13 +18,13 @@
           <%= link_to "Home", root_path, class: "nav-link fw-semibold #{'active' if current_page?(root_path)}" %>
         </li>
         
-        <!-- Categories Dropdown - REPLACES the old Categories link -->
+          <!-- Categories Dropdown -->
         <li class="nav-item dropdown mx-2">
           <a class="nav-link dropdown-toggle fw-semibold <%= 'active' if controller_name == 'categories' || params[:category_id].present? %>" 
-             href="#" 
-             role="button" 
-             data-bs-toggle="dropdown" 
-             aria-expanded="false">
+            href="#" 
+            role="button" 
+            data-bs-toggle="dropdown" 
+            aria-expanded="false">
             <i class="bi bi-grid me-1"></i>Categories
           </a>
           <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="min-width: 250px;">
@@ -36,23 +36,29 @@
             </li>
             
             <!-- Dynamic Categories from Database -->
-            <% @categories.each do |category| %>
-              <li>
-                <%= link_to products_path(category_id: category.id), 
-                    class: "dropdown-item py-2 d-flex justify-content-between align-items-center #{'active bg-light' if params[:category_id].to_i == category.id}" do %>
-                  <span>
-                  
+            <% if @categories.present? %>
+              <% @categories.each do |category| %>
+                <li>
+                  <%= link_to products_path(category_id: category.id), 
+                      class: "dropdown-item py-2 d-flex justify-content-between align-items-center #{'active bg-light' if params[:category_id].to_i == category.id}" do %>
+                    <span>
                       <i class="bi bi-tag me-2 text-muted"></i>
-                  
-                    <%= category.name %>
-                  </span>
-                  <span class="badge bg-primary rounded-pill"><%= category.products.count %></span>
-                <% end %>
+                      <%= category.name %>
+                    </span>
+                    <span class="badge bg-primary rounded-pill"><%= category.products_count %></span>
+                  <% end %>
+                </li>
+              <% end %>
+            <% else %>
+              <li>
+                <span class="dropdown-item text-muted py-2">
+                  <i class="bi bi-exclamation-circle me-2"></i>No categories found
+                </span>
               </li>
             <% end %>
             
             <!-- Show more link if too many categories -->
-            <% if @categories.count > 8 %>
+            <% if @categories && @categories.count >= 8 %>
               <li><hr class="dropdown-divider"></li>
               <li>
                 <%= link_to categories_path, class: "dropdown-item py-2 text-primary" do %>
